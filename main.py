@@ -24,6 +24,7 @@ BLUE2 = (0, 100, 255)
 BLACK = (0, 0, 0)
 
 BLOCK_SIZE = 20
+SPEED = 20
 
 
 class SnakeGame:
@@ -43,7 +44,6 @@ class SnakeGame:
         self.snake = [self.head, Point(self.head.x - BLOCK_SIZE, self.head.y),
                       Point(self.head.x - (2 * BLOCK_SIZE), self.head.y)]
 
-        self.speed = 10 + len(self.snake) - 3
 
         self.score = 0
         self.food = None
@@ -93,7 +93,7 @@ class SnakeGame:
 
         # update ui and clock
         self._update_ui()
-        self.clock.tick(self.speed)
+        self.clock.tick(SPEED)
 
         # return game over and score
         return game_over, self.score

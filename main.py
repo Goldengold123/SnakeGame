@@ -24,7 +24,6 @@ BLUE2 = (0, 100, 255)
 BLACK = (0, 0, 0)
 
 BLOCK_SIZE = 20
-SPEED = 10
 
 
 class SnakeGame:
@@ -43,6 +42,8 @@ class SnakeGame:
         self.head = Point(self.w / 2, self.h / 2)
         self.snake = [self.head, Point(self.head.x - BLOCK_SIZE, self.head.y),
                       Point(self.head.x - (2 * BLOCK_SIZE), self.head.y)]
+
+        self.speed = 10 + len(self.snake) - 3
 
         self.score = 0
         self.food = None
@@ -75,6 +76,7 @@ class SnakeGame:
         # move
         self._move(self.direction)
         self.snake.insert(0, self.head)
+        self._at_edge_shift()
 
         # game over?
         game_over = False
@@ -91,7 +93,7 @@ class SnakeGame:
 
         # update ui and clock
         self._update_ui()
-        self.clock.tick(SPEED)
+        self.clock.tick(self.speed)
 
         # return game over and score
         return game_over, self.score
@@ -124,11 +126,16 @@ class SnakeGame:
         self.head = Point(x, y)
 
     def _is_collision(self):
-        if self.head.x > self.w - BLOCK_SIZE or self.head.x < 0 or self.head.y > self.h - BLOCK_SIZE or self.head.y < 0:
-            return True
         if self.head in self.snake[1:]:
             return True
         return False
+
+    def _at_edge_shift(self):
+        newSnake = []
+        for pt in self.snake:
+            newSnake.append(Point(pt.x % self.w, pt.y % self.h))
+        self.head = newSnake[0]
+        self.snake = newSnake
 
 
 if __name__ == '__main__':
